@@ -130,8 +130,12 @@ form.addEventListener('submit', (e) => {
   const employeeName = formData.get('name').trim();
   const position = (formData.get('position') || '').toString().trim();
   const age = Number(formData.get('age'));
-  const salary = Number(formData.get('salary'));
-  const office = formData.get('office');
+
+  if (!position) {
+    showNotification('Position is required!', 'error');
+
+    return;
+  }
 
   if (employeeName.length < 4) {
     showNotification('Name must be at least 4 characters long!', 'error');
@@ -153,11 +157,12 @@ form.addEventListener('submit', (e) => {
 
   addEmployeeToTable({
     name: employeeName,
-    position: position,
-    age: age,
-    salary: salary,
-    office: office,
+    position,
+    office: formData.get('office'),
+    age,
+    salary: Number(formData.get('salary')),
   });
+
   showNotification('Employee added successfully!', 'success');
 
   form.reset();
